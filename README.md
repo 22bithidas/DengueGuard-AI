@@ -30,7 +30,7 @@ DengueGuard AI is developed collaboratively by a three-member team, with respons
 **Responsibility: Flask Dashboard & Backend Development**
 
 - Backend development and data processing.
-- Streamlit-based interactive dashboard development.
+- flask based interactive dashboard development.
 - Dashboard layout and user interface.
 - Data visualization using charts and graphs.
 - Ward-wise dengue prediction display.
