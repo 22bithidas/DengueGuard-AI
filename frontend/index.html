@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a26"><title>DengueGuard AI | Ward Early Warning</title>
+  <link rel="stylesheet" href="/frontend/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview"><span class="logo">⌁</span><span><b>DENGUEGUARD</b><small>AI · EARLY WARNING</small></span></a>
+      <div class="nav-title">OPERATIONS</div><a class="nav selected" href="#overview"><i>◉</i>Risk overview</a>
+      <a class="nav" href="#drivers"><i>⌁</i>Model drivers</a><a class="nav" href="#watchlist"><i>⌖</i>Ward watchlist</a><a class="nav" href="#validation"><i>◌</i>Model validation</a>
+      <div class="sidebar-bottom"><div class="live"><span></span><div><b id="modelStatus">CONNECTING</b><small id="datasetStatus">Loading local model</small></div></div><p>Local decision-support prototype<br>Historical dataset snapshot</p></div>
+    </aside>
+    <main>
+      <header class="topline"><span>PUBLIC HEALTH <i>/</i> BANGLADESH</span><div>WARD SURVEILLANCE <b class="user-badge">PH</b></div></header>
+      <section id="overview" class="heading"><div><div class="overline">DENGUE OUTBREAK SIGNAL <span id="cityName">/ CITY</span></div><h1>Ward risk dashboard</h1><p>Compare model-based dengue risk across wards, 2 and 4 weeks ahead.</p></div><div class="snapshot">DATA THROUGH <b id="latestDate">—</b></div></section>
+      <form id="selectors" class="selectors">
+        <label>City<select id="city"></select></label><i></i><label>Ward<select id="ward"></select></label><i></i>
+        <label>Observation week<select id="date"></select></label><i></i><label>Lead time<select id="horizon"><option value="2">2 weeks</option><option value="4">4 weeks</option></select></label>
+        <button type="submit" class="button">Generate outlook <b>→</b></button>
+      </form>
+      <div id="error" class="error" hidden></div>
+      <section class="content-grid">
+        <article class="panel risk-panel"><div class="panel-kicker">FORECAST CASES <span id="leadLabel">· 2 WEEKS AHEAD</span></div><div class="risk-value" id="prediction">—</div><div id="riskLabel" class="risk-label"><i></i><b>—</b> risk</div><div class="selected-context" id="context">Ward forecast</div><div class="risk-metrics"><div><b id="rank">—</b><small>ward rank</small></div><div><b id="mae">—</b><small>test MAE · cases</small></div><div><b id="r2">—</b><small>test R²</small></div></div><div class="algorithm" id="modelName">Selected notebook model</div></article>
+        <article class="panel"><div class="panel-heading"><div><h2>Reported dengue cases</h2><p>Selected ward · trailing 26 observations</p></div><span class="chip" id="historyWard">WARD</span></div><div id="chart" class="chart"></div><div class="chart-axis"><span id="chartFirst">—</span><span id="chartLast">—</span></div><div class="chart-legend"><i></i>Observed weekly dengue cases</div></article>
+        <article id="drivers" class="panel"><div class="panel-heading"><div><h2>Prediction drivers</h2><p>Selected model feature importance</p></div><button id="toggleScenario" class="link-button" type="button">What-if inputs ↗</button></div><div id="driverList" class="drivers"></div><form id="scenario" hidden><div class="scenario-grid"><label>Avg temp °C<input name="avg_temp_c" type="number" step="0.1"></label><label>Rainfall mm<input name="rainfall_mm" type="number" step="0.1"></label><label>Humidity %<input name="relative_humidity_pct" type="number" step="0.1"></label></div><button class="button small" type="submit">Recalculate scenario →</button></form><div class="signal-note">Rainfall and dengue history are engineered ward-by-ward. The notebook’s CatBoost and LightGBM models supply the forecasts.</div></article>
+        <article id="watchlist" class="panel"><div class="panel-heading"><div><h2>Ward watchlist</h2><p id="watchText">Top predicted wards for the selected city</p></div><span class="chip" id="wardCount">— WARDS</span></div><div class="table-scroll"><table><thead><tr><th>WARD</th><th>TIER</th><th>CASES</th><th>WEEK</th></tr></thead><tbody id="watchRows"></tbody></table></div><div class="tier-note">Low &lt; P75 · Medium P75–P90 · High P90–P95 · Critical ≥ P95 of training targets.</div></article>
+        <article id="validation" class="panel validation-panel"><div class="panel-heading"><div><h2>Chronological validation</h2><p>70% train · 15% validation · 15% test</p></div><span class="chip">TARGET-DATE SAFE</span></div><div class="validation-stats"><div><small>Test MAE</small><b id="testMae">—</b></div><div><small>Test RMSE</small><b id="testRmse">—</b></div><div><small>Test R²</small><b id="testR2">—</b></div><div><small>Validation MAE</small><b id="valMae">—</b></div></div><p class="tier-note">Metrics are recalculated when the model artifact is created from this repository’s dataset.</p></article>
+      </section>
+      <footer>DENGUEGUARD AI <span>·</span> LOCAL INFERENCE <span>·</span> SOURCE SNAPSHOT <b id="footerDate">—</b></footer>
+    </main>
+  </div>
+  <script src="/frontend/app.js" defer></script>
+</body>
+</html>
