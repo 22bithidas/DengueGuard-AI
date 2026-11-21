@@ -1,0 +1,38 @@
+{
+    "project": "DengueGuard AI",
+    "selected_models": {
+        "2_week": "Advanced CatBoost",
+        "4_week": "Advanced LightGBM"
+    },
+    "test_performance": {
+        "2_week": {
+            "MAE": 1.1484,
+            "RMSE": 2.2232,
+            "R2": 0.7126
+        },
+        "4_week": {
+            "MAE": 1.2832,
+            "RMSE": 2.5017,
+            "R2": 0.5507
+        }
+    },
+    "total_wards_predicted": 60,
+    "latest_input_date": "2025-12-29",
+    "risk_distribution_2week": {
+        "Low": 60
+    },
+    "risk_distribution_4week": {
+        "Low": 60
+    },
+    "risk_thresholds": {
+        "2_week": {
+            "moderate_threshold": 3.0,
+            "high_threshold": 9.0
+        },
+        "4_week": {
+            "moderate_threshold": 3.0,
+            "high_threshold": 9.0
+        }
+    },
+    "important_note": "Predictions are historical projections from the latest available dataset date, not live forecasts. All wards classified Low because predictions were below training-derived thresholds."
+}
