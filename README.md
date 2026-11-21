@@ -37,6 +37,9 @@ DengueGuard AI is developed collaboratively by a three-member team, with respons
 - Dengue risk-level visualization.
 - Backend and dashboard integration support.
 
+Deployment Site Link: https://dengueguard-ai.onrender.com/
+### API link: https://dengueguard-ai.onrender.com/api/options
+
 ### Collaborative Development
 
 All three team members contribute to building an integrated DengueGuard AI system by combining machine learning predictions, backend services, and interactive data visualization.
