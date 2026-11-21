@@ -9,14 +9,14 @@ This web app adds a browser frontend and Flask API to the supplied notebook proj
 
 ## Run locally
 
-Python 3.10 or 3.11 is recommended. From the repository root in PowerShell:
+Python 3.12 is recommended. The CatBoost dependency in this project does not install cleanly under Python 3.15 in the current Windows setup. Run these commands from the repository root in PowerShell:
 
 ```powershell
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python backend\train_models.py
-python backend\app.py
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+# Run once if model files are missing, or after replacing the dataset
+.\.venv\Scripts\python.exe backend\train_models.py
+.\.venv\Scripts\python.exe backend\app.py
 ```
 
 Open `http://127.0.0.1:5000`. The first training command saves the selected estimators and preprocessors under `models/`; the API loads them once per process and caches the engineered workbook. If you replace the workbook, retrain before starting the app.
