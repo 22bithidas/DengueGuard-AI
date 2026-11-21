@@ -51,7 +51,9 @@ This web app adds a browser frontend and Flask API to the supplied notebook proj
 ```powershell
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m streamlit run streamlit_app.py
+# Run once if model files are missing, or after replacing the dataset
+.\.venv\Scripts\python.exe backend\train_models.py
+.\.venv\Scripts\python.exe backend\app.py
 ```
 
 ## Dashboard

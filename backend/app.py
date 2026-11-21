@@ -179,7 +179,7 @@ def predict():
     for (_, ward_row), score in zip(latest_by_ward.iterrows(), scores):
         watchlist.append({
             "ward_id": str(ward_row.ward_id), "predicted_cases": round(float(score), 2),
-            "risk_tier": risk_tier(float(score), bounds), "date": ward_row.date.strftime("%Y-%m-%d"), "forecast_week": (ward_row.date + pd.Timedelta(weeks=horizon)).strftime("%Y-%m-%d"),
+            "risk_tier": risk_tier(float(score), bounds), "date": ward_row.date.strftime("%Y-%m-%d"),
         })
     watchlist.sort(key=lambda item: item["predicted_cases"], reverse=True)
     selected_rank = next((i for i, item in enumerate(watchlist, 1) if item["ward_id"] == ward), None)
@@ -202,4 +202,3 @@ def predict():
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=False)
-
