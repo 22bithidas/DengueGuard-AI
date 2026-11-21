@@ -11,8 +11,31 @@ function setOptions(select, values, selected) {
     option.selected = value === selected; return option;
   }));
 }
-async function api(url, init) {
-  const response = await fetch(url, init); const result = await response.json();
+const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+async function api(url, init, attempt = 0) {
+  let response;
+  try {
+    response = await fetch(url, { ...init, cache: "no-store" });
+  } catch (error) {
+    if (attempt < 2) {
+      await pause(1500 * (attempt + 1));
+      return api(url, init, attempt + 1);
+    }
+    throw new Error("Could not connect to the Flask service. Render's free instance may be waking; wait briefly and reload. " + error.message);
+  }
+
+  const contentType = response.headers.get("content-type") || "";
+  const body = await response.text();
+  let result;
+  try {
+    result = JSON.parse(body);
+  } catch {
+    if (attempt < 2) {
+      await pause(1500 * (attempt + 1));
+      return api(url, init, attempt + 1);
+    }
+    throw new Error(`Flask returned a non-JSON page (HTTP ${response.status}). The Render service may still be starting. Wait 30-60 seconds, then reload. Response type: ${contentType || "unknown"}.`);
+  }
   if (!response.ok) throw new Error(result.error || result.message || `Request failed (${response.status})`);
   return result;
 }
@@ -43,9 +66,6 @@ function drawDrivers(items) {
 function drawWatchlist(result) {
   byId("rank").textContent = result.selected_rank ? `#${result.selected_rank} / ${state.meta.wards.length}` : "—";
   byId("watchText").textContent = `Top wards by ${result.horizon_weeks}-week predicted cases · ${result.city}`;
-  const forecastWeeks = [...new Set(result.watchlist.map(row => row.forecast_week).filter(Boolean))];
-  byId("watchWeek").textContent = forecastWeeks.length === 1
-    ? `FORECAST WEEK · ${forecastWeeks[0]} · shared reporting week` : "Forecast week varies by ward";
   byId("watchRows").innerHTML = result.watchlist.map(row => `<tr class="${row.ward_id===result.ward_id?"current":""}"><td class="ward">${row.ward_id}</td><td><span class="badge ${row.risk_tier.toLowerCase()}">${row.risk_tier}</span></td><td class="cases">${row.predicted_cases.toFixed(2)}</td></tr>`).join("");
 }
 function render(result) {
@@ -77,5 +97,10 @@ byId("selectors").addEventListener("submit", async event => { event.preventDefau
 byId("toggleScenario").addEventListener("click", () => { byId("scenario").hidden = !byId("scenario").hidden; });
 byId("scenario").addEventListener("submit", async event => { event.preventDefault(); const weather = Object.fromEntries(new FormData(event.currentTarget)); try { await predict(weather); } catch(e) { showError(e.message); } });
 (async () => { try { await loadOptions(); await predict(); } catch(e) { byId("modelStatus").textContent = "SETUP REQUIRED"; byId("datasetStatus").textContent = "Check README setup"; showError(`${e.message}. Install requirements and run python backend\\train_models.py first.`); } })();
+
+
+
+
+
 
 
