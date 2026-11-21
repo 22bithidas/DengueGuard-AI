@@ -1,0 +1,11 @@
+city,ward_id,predicted_cases_2week,risk_2week,predicted_cases_4week,risk_4week,average_predicted_cases
+Gazipur,GCC_Ward_03,0.08,Low,0.06,Low,0.07
+Chattogram,CCC_Ward_01,0.06,Low,0.06,Low,0.06
+Dhaka South,DSCC_Ward_06,0.05,Low,0.06,Low,0.055
+Dhaka North,DNCC_Ward_09,0.06,Low,0.05,Low,0.055
+Dhaka South,DSCC_Ward_04,0.05,Low,0.06,Low,0.055
+Dhaka South,DSCC_Ward_12,0.05,Low,0.06,Low,0.055
+Dhaka South,DSCC_Ward_10,0.05,Low,0.06,Low,0.055
+Narayanganj,NCC_Ward_01,0.05,Low,0.05,Low,0.05
+Dhaka North,DNCC_Ward_10,0.04,Low,0.06,Low,0.05
+Chattogram,CCC_Ward_03,0.04,Low,0.06,Low,0.05
