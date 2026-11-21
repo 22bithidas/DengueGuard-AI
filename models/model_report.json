@@ -1,0 +1,87 @@
+{
+  "selected_models": {
+    "2_week": "Advanced CatBoost",
+    "4_week": "Advanced LightGBM"
+  },
+  "feature_count": 38,
+  "features": [
+    "city",
+    "ward_id",
+    "population_density_sqkm",
+    "water_logging_risk_index",
+    "sanitation_score",
+    "avg_temp_c",
+    "max_temp_c",
+    "min_temp_c",
+    "rainfall_mm",
+    "relative_humidity_pct",
+    "dengue_cases",
+    "dengue_lag_1",
+    "dengue_lag_2",
+    "dengue_lag_4",
+    "dengue_lag_8",
+    "rainfall_sum_2w",
+    "rainfall_sum_4w",
+    "avg_temp_c_lag_1",
+    "avg_temp_c_lag_2",
+    "relative_humidity_pct_lag_1",
+    "relative_humidity_pct_lag_2",
+    "rainfall_mm_lag_1",
+    "rainfall_mm_lag_2",
+    "month",
+    "week_of_year",
+    "dengue_lag_12",
+    "dengue_lag_52",
+    "dengue_roll_4",
+    "dengue_roll_8",
+    "dengue_roll_12",
+    "week_sin",
+    "week_cos",
+    "rainfall_roll_4",
+    "rainfall_roll_8",
+    "temp_humidity_interaction",
+    "rainfall_humidity_interaction",
+    "temp_rainfall_interaction",
+    "temp_humidity_rainfall"
+  ],
+  "split": "chronological 70/15/15 with target-date boundary protection",
+  "train_end": {
+    "2_week": "2023-04-03",
+    "4_week": "2023-03-27"
+  },
+  "validation_end": {
+    "2_week": "2024-08-05",
+    "4_week": "2024-07-29"
+  },
+  "validation_metrics": {
+    "2_week": {
+      "samples": 4080,
+      "mae": 1.2148482885127079,
+      "rmse": 2.2688951841181435,
+      "r2": 0.807344740855582
+    },
+    "4_week": {
+      "samples": 3960,
+      "mae": 1.5574259388162708,
+      "rmse": 2.894953785556011,
+      "r2": 0.6892498690967086
+    }
+  },
+  "test_metrics": {
+    "2_week": {
+      "samples": 4260,
+      "mae": 1.125719477147373,
+      "rmse": 2.1927626061458585,
+      "r2": 0.7152161733166754
+    },
+    "4_week": {
+      "samples": 4200,
+      "mae": 1.336469376877949,
+      "rmse": 2.602025924257999,
+      "r2": 0.5409461130403743
+    }
+  },
+  "dataset_rows": 31320,
+  "ward_count": 60,
+  "latest_input_date": "2025-12-29"
+}
