@@ -1,0 +1,18 @@
+{
+  "2": {
+    "low_below": 3.0,
+    "medium_from": 3.0,
+    "high_from": 9.0,
+    "critical_from": 13.0,
+    "notebook_moderate_threshold": 3.0,
+    "notebook_high_threshold": 9.0
+  },
+  "4": {
+    "low_below": 3.0,
+    "medium_from": 3.0,
+    "high_from": 9.0,
+    "critical_from": 13.0,
+    "notebook_moderate_threshold": 3.0,
+    "notebook_high_threshold": 9.0
+  }
+}
