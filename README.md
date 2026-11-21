@@ -31,7 +31,7 @@ The source dataset ends on 29 December 2025. This prototype gives historical-sna
 
 `backend/feature_engineering.py` reproduces the notebook's 25 original inputs plus 13 advanced features: dengue lags 12/52, shifted dengue rolling means (4/8/12 weeks), seasonal sine/cosine, shifted rainfall means (4/8 weeks), and four temperature/rainfall/humidity interactions. The 2-week horizon uses the selected advanced CatBoost model; 4 weeks uses selected advanced LightGBM. Estimator parameters are in `backend/train_models.py`.
 
-The repository currently includes notebook-reported metrics and risk thresholds but not the notebook's saved estimator/preprocessor artifacts. The training command regenerates these locally from `data/hackathon_preli_dataset.xlsx`.
+The repository includes the saved estimator and preprocessor artifacts under `models/`, along with the notebook-reported metrics and risk thresholds. To retrain them after changing the dataset, run `python backend/train_models.py`.
 
 ## AI and external service disclosure
 
@@ -42,4 +42,10 @@ The repository currently includes notebook-reported metrics and risk thresholds 
 ## Three-minute demo checklist
 
 Record one uncut screen capture (maximum 3:00), with voiceover and no slides: start the localhost app, select a ward and horizon, explain the model tier and feature drivers, edit weather assumptions, and show chronological validation metrics.
+## Deploy to Render
+
+The repository includes `render.yaml` with the Flask web service configuration. From Render, create a new **Blueprint** and connect this repository; Render will read the manifest and configure the Python build, Gunicorn start command, and `/api/health` check. The service must include the `backend`, `frontend`, `data`, and `models` directories together at the repository root because the Flask app loads them via relative project paths.
+
+Before creating the service, commit and push these local deployment changes and any other intended project files to your GitHub branch. This project pins the Python model-library versions to the environment used to load the checked-in model artifacts; `.python-version` selects Python 3.12. Do not delete the model artifacts or dataset. After Render reports the service as live, open its `onrender.com` URL and confirm `/api/health` returns `"status":"ready"`, then test a prediction in the dashboard.
+
 
