@@ -43,7 +43,10 @@ function drawDrivers(items) {
 function drawWatchlist(result) {
   byId("rank").textContent = result.selected_rank ? `#${result.selected_rank} / ${state.meta.wards.length}` : "—";
   byId("watchText").textContent = `Top wards by ${result.horizon_weeks}-week predicted cases · ${result.city}`;
-  byId("watchRows").innerHTML = result.watchlist.map(row => `<tr class="${row.ward_id===result.ward_id?"current":""}"><td class="ward">${row.ward_id}</td><td><span class="badge ${row.risk_tier.toLowerCase()}">${row.risk_tier}</span></td><td class="cases">${row.predicted_cases.toFixed(2)}</td><td>${row.date}</td></tr>`).join("");
+  const forecastWeeks = [...new Set(result.watchlist.map(row => row.forecast_week).filter(Boolean))];
+  byId("watchWeek").textContent = forecastWeeks.length === 1
+    ? `FORECAST WEEK · ${forecastWeeks[0]} · shared reporting week` : "Forecast week varies by ward";
+  byId("watchRows").innerHTML = result.watchlist.map(row => `<tr class="${row.ward_id===result.ward_id?"current":""}"><td class="ward">${row.ward_id}</td><td><span class="badge ${row.risk_tier.toLowerCase()}">${row.risk_tier}</span></td><td class="cases">${row.predicted_cases.toFixed(2)}</td></tr>`).join("");
 }
 function render(result) {
   state.result = result; showError("");
@@ -74,3 +77,5 @@ byId("selectors").addEventListener("submit", async event => { event.preventDefau
 byId("toggleScenario").addEventListener("click", () => { byId("scenario").hidden = !byId("scenario").hidden; });
 byId("scenario").addEventListener("submit", async event => { event.preventDefault(); const weather = Object.fromEntries(new FormData(event.currentTarget)); try { await predict(weather); } catch(e) { showError(e.message); } });
 (async () => { try { await loadOptions(); await predict(); } catch(e) { byId("modelStatus").textContent = "SETUP REQUIRED"; byId("datasetStatus").textContent = "Check README setup"; showError(`${e.message}. Install requirements and run python backend\\train_models.py first.`); } })();
+
+
