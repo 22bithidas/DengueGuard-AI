@@ -116,7 +116,11 @@ def make_watchlist(city_rows: pd.DataFrame, horizon: int, fitted: dict) -> pd.Da
         "Ward": latest["ward_id"].astype(str).to_numpy(),
         "Forecast cases": np.round(predictions, 2),
         "Risk tier": [risk_tier(float(value), thresholds) for value in predictions],
+<<<<<<< HEAD
         "Forecast week": (latest["date"] + pd.to_timedelta(horizon, unit="W")).dt.strftime("%Y-%m-%d").to_numpy(),
+=======
+        "Data week": latest["date"].dt.strftime("%Y-%m-%d").to_numpy(),
+>>>>>>> d126b957ce4c6b47c8b131b7d9752373669ea6eb
     })
     return result.sort_values("Forecast cases", ascending=False).reset_index(drop=True)
 
@@ -220,12 +224,16 @@ with tab_outlook:
     with c2:
         st.markdown("#### Ward watchlist")
         st.caption(f"Top wards in {city} by {horizon}-week predicted cases. Selected ward rank: {f'#{selected_rank}' if selected_rank else 'not ranked'}.")
+<<<<<<< HEAD
         forecast_weeks = watchlist["Forecast week"].dropna().unique().tolist()
         if len(forecast_weeks) == 1:
             st.caption(f"Forecast week: {forecast_weeks[0]}. All listed wards share this week in the source data.")
         else:
             st.caption("Forecast week is calculated per ward from its latest available observation.")
         st.dataframe(watchlist.drop(columns=["Forecast week"]).head(10), width="stretch", hide_index=True)
+=======
+        st.dataframe(watchlist.head(10), width="stretch", hide_index=True)
+>>>>>>> d126b957ce4c6b47c8b131b7d9752373669ea6eb
 
 with tab_performance:
     st.markdown(f"### {horizon}-week model: {model_name}")
@@ -247,4 +255,7 @@ with tab_about:
 
 st.divider()
 st.caption("DengueGuard AI | Historical-snapshot decision-support prototype | No external prediction API")
+<<<<<<< HEAD
 
+=======
+>>>>>>> d126b957ce4c6b47c8b131b7d9752373669ea6eb
