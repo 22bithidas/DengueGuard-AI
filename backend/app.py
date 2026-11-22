@@ -95,12 +95,16 @@ def importance_rows(model, preprocessor, top_n: int = 7) -> list[dict]:
 
 @app.get("/")
 def home():
-    return send_from_directory(FRONTEND, "index.html")
+    response = send_from_directory(FRONTEND, "index.html")
+    response.headers["Cache-Control"] = "no-store, max-age=0"
+    return response
 
 
 @app.get("/frontend/<path:filename>")
 def frontend_file(filename: str):
-    return send_from_directory(FRONTEND, filename)
+    response = send_from_directory(FRONTEND, filename)
+    response.headers["Cache-Control"] = "no-store, max-age=0"
+    return response
 
 
 @app.get("/api/health")

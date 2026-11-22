@@ -14,29 +14,41 @@ function setOptions(select, values, selected) {
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function api(url, init, attempt = 0) {
   let response;
+  if (attempt > 0) {
+    byId("modelStatus").textContent = "WAKING SERVICE";
+    byId("datasetStatus").textContent = "Render may take up to a minute to start";
+    showError("The API is starting after inactivity. Retrying automatically…");
+    await pause(Math.min(2000 * 2 ** (attempt - 1), 12000));
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20000);
   try {
-    response = await fetch(url, { ...init, cache: "no-store" });
+    response = await fetch(url, { ...init, signal: controller.signal, cache: "no-store" });
   } catch (error) {
-    if (attempt < 2) {
-      await pause(1500 * (attempt + 1));
+    clearTimeout(timeout);
+    if (attempt < 4) {
       return api(url, init, attempt + 1);
     }
-    throw new Error("Could not connect to the Flask service. Render's free instance may be waking; wait briefly and reload. " + error.message);
+    const reason = error.name === "AbortError" ? "The API took longer than 20 seconds to respond." : error.message;
+    throw new Error("Could not connect to the Flask service after several attempts. Render's free instance may be waking; wait briefly and reload. " + reason);
   }
 
+  clearTimeout(timeout);
   const contentType = response.headers.get("content-type") || "";
   const body = await response.text();
   let result;
   try {
     result = JSON.parse(body);
   } catch {
-    if (attempt < 2) {
-      await pause(1500 * (attempt + 1));
+    if (attempt < 4) {
       return api(url, init, attempt + 1);
     }
     throw new Error(`Flask returned a non-JSON page (HTTP ${response.status}). The Render service may still be starting. Wait 30-60 seconds, then reload. Response type: ${contentType || "unknown"}.`);
   }
-  if (!response.ok) throw new Error(result.error || result.message || `Request failed (${response.status})`);
+  if (!response.ok) {
+    if ([502, 503, 504].includes(response.status) && attempt < 4) return api(url, init, attempt + 1);
+    throw new Error(result.error || result.message || `Request failed (${response.status})`);
+  }
   return result;
 }
 async function loadOptions(city, ward) {
@@ -70,6 +82,7 @@ function drawWatchlist(result) {
 }
 function render(result) {
   state.result = result; showError("");
+  byId("modelStatus").textContent = "LOCAL MODELS READY";
   byId("cityName").textContent = `/ ${result.city.toUpperCase()}`;
   byId("prediction").textContent = result.predicted_cases.toFixed(2);
   byId("leadLabel").textContent = `· ${result.horizon_weeks} WEEKS AHEAD`;

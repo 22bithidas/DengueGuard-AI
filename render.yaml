@@ -3,5 +3,5 @@ services:
     name: dengueguard-ai
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --chdir backend app:app --bind 0.0.0.0:$PORT --workers 1
+    startCommand: gunicorn --chdir backend app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120 --graceful-timeout 30
     healthCheckPath: /api/health
