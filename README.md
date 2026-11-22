@@ -59,4 +59,7 @@ py -3.12 -m venv .venv
 ## Dashboard
 Choose a city, ward, observation week, and 2- or 4-week horizon. The dashboard shows the predicted weekly case count, a four-tier risk classification, model feature importance, trailing ward cases, city watchlist and validation/test metrics. The what-if form edits current-week temperature, rainfall and humidity and recalculates the notebook's dependent interaction features.
 
+## Limitation
+The website have a little issue in Ward watchlist . We tried to fix this but somehow the data is not working perfectly . We are guessing this is problem of API that we use .
+
 
