@@ -53,13 +53,24 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 # Run once if model files are missing, or after replacing the dataset
 .\.venv\Scripts\python.exe backend\train_models.py
+.\.venv\Scripts\python.exe backend\export_static_dashboard.py
 .\.venv\Scripts\python.exe backend\app.py
 ```
 
 ## Dashboard
-Choose a city, ward, observation week, and 2- or 4-week horizon. The dashboard shows the predicted weekly case count, a four-tier risk classification, model feature importance, trailing ward cases, city watchlist and validation/test metrics. The what-if form edits current-week temperature, rainfall and humidity and recalculates the notebook's dependent interaction features.
+Choose a city, ward, observation week, and 2- or 4-week horizon. The dashboard shows the predicted weekly case count, a four-tier risk classification, model feature importance, trailing ward cases, city watchlist and validation/test metrics. The static dashboard's forecasts are precomputed by the same saved CatBoost and LightGBM models from the supplied dataset snapshot. This keeps the results available when the Flask API is asleep. The API remains available for live inference and what-if requests.
 
-## Limitation
-The website have a little issue in Ward watchlist . We tried to fix this but somehow the data is not working perfectly . We are guessing this is problem of API that we use .
+## Always-available static dashboard on Render
+Render's free web service can sleep when idle. To give reviewers a dashboard that does not depend on the API waking up, deploy the static dashboard as a separate Render Static Site:
+
+1. In Render, choose **New → Static Site** and connect this GitHub repository on the `main` branch.
+2. Leave **Root Directory** blank.
+3. Set **Build Command** to `pip install -r requirements.txt && python backend/export_static_dashboard.py`.
+4. Set **Publish Directory** to `frontend`.
+5. Deploy and submit the new static site's URL to reviewers. The existing Flask web service and API can remain available separately.
+
+The build runs both saved model artifacts over the prepared dataset and writes `frontend/dashboard-data.json`. The static page then reads that file directly from Render's CDN. When the dataset or model artifacts change, a new static-site deploy regenerates the snapshot. The static dashboard does not provide interactive weather what-if scoring; that remains in the Flask API.
+
+For Blueprint deployments, `render.yaml` also defines the separate static site and a build step for generating its dashboard data.
 
 

@@ -2,6 +2,17 @@ services:
   - type: web
     name: dengueguard-ai
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    plan: free
+    buildCommand: pip install -r requirements.txt && python backend/export_static_dashboard.py
     startCommand: gunicorn --chdir backend app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120 --graceful-timeout 30
     healthCheckPath: /api/health
+    autoDeployTrigger: commit
+
+  # Always-available dashboard. The model output is computed at build time;
+  # visitors do not need the sleeping Flask API just to view forecasts.
+  - type: web
+    name: dengueguard-dashboard
+    runtime: static
+    buildCommand: pip install -r requirements.txt && python backend/export_static_dashboard.py
+    staticPublishPath: ./frontend
+    autoDeployTrigger: commit

@@ -107,6 +107,16 @@ def frontend_file(filename: str):
     return response
 
 
+@app.get("/app.js")
+@app.get("/styles.css")
+@app.get("/dashboard-data.json")
+def static_dashboard_file():
+    filename = request.path.lstrip("/")
+    response = send_from_directory(FRONTEND, filename)
+    response.headers["Cache-Control"] = "no-store, max-age=0"
+    return response
+
+
 @app.get("/api/health")
 def health():
     try:
